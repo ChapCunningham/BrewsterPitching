@@ -93,7 +93,7 @@ filtered_df = filter_data()
 
 
             # Customize layout with limits
-        fig.update_layout(
+fig.update_layout(
                 title=title,
                 xaxis=dict(title=x_col, range=x_lim),
                 yaxis=dict(title=y_col, range=y_lim),
