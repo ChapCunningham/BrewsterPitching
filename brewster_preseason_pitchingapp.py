@@ -304,6 +304,17 @@ def plot_heatmaps(pitcher_name, batter_side, strikes, balls, date_filter_option,
         st.write(f"Error generating {map_type} heatmaps: {e}")
 
 
+plotly_color_dict = {
+            'Fastball': 'royalblue',
+            'Sinker': 'goldenrod',
+            'Slider': 'mediumseagreen',
+            'Curveball': 'firebrick',
+            'Cutter': 'darkorange',
+            'ChangeUp': 'mediumpurple',
+            'Splitter': 'teal',
+            'Unknown': 'black',
+            'Other': 'black'
+        }
 
 
 
