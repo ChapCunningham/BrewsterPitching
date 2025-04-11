@@ -105,7 +105,7 @@ fig.update_layout(
 return fig
 
         # Create and display the release angle plot
-        if not release_data.empty:
+if not release_data.empty:
             release_fig = create_scatter_plot(
                 release_data, 
                 'HorzRelAngle', 'VertRelAngle', 
@@ -116,7 +116,7 @@ return fig
             st.plotly_chart(release_fig, use_container_width=True)
 
         # Create and display the approach angle plot
-        if not approach_data.empty:
+if not approach_data.empty:
             approach_fig = create_scatter_plot(
                 approach_data, 
                 'HorzApprAngle', 'VertApprAngle', 
