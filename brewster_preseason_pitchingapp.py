@@ -11,7 +11,6 @@ import plotly.graph_objects as go
 
 # === LOAD DATA ===
 @st.cache_data
-
 def load_data(file_path):
     df = pd.read_csv(file_path)
     if 'Date' in df.columns:
@@ -22,7 +21,6 @@ def load_data(file_path):
 # File path for 2025 Season data
 season_file_path = "BrewsterPitchers_College_2025.csv"
 season_df = load_data(season_file_path)
-
 
 # Convert numeric columns
 numeric_columns = ['RelSpeed', 'SpinRate', 'Tilt', 'RelHeight', 'RelSide', 
@@ -74,7 +72,7 @@ elif date_filter_option == "Date Range":
         st.sidebar.warning("Please select a valid date range.")
 
 # === FILTER FUNCTION ===
-def filter_data():
+def filter_data(pitcher_name, batter_side, strikes, balls, date_filter_option, selected_date, start_date, end_date):
     df = season_df[season_df['Pitcher'] == pitcher_name]
     if batter_side != 'Both':
         df = df[df['BatterSide'] == batter_side]
@@ -88,8 +86,13 @@ def filter_data():
         df = df[(df['Date'] >= pd.to_datetime(start_date)) & (df['Date'] <= pd.to_datetime(end_date))]
     return df
 
-# === CALL REPORT FUNCTIONS ===
-filtered_df = filter_data()
+# === FILTERED DATA FOR GLOBAL USE ===
+filtered_df = filter_data(pitcher_name, batter_side, strikes, balls, date_filter_option, selected_date, start_date, end_date)
+
+# === EXTRACT RELEASE & APPROACH DATA FOR GLOBAL USE ===
+release_data = filtered_df.dropna(subset=['HorzRelAngle', 'VertRelAngle'])
+approach_data = filtered_df.dropna(subset=['HorzApprAngle', 'VertApprAngle'])
+
 
 # Function to create a scatter plot with bounding circles and average values
 def create_scatter_plot(data, x_col, y_col, title, x_lim, y_lim):
