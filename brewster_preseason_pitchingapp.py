@@ -126,7 +126,7 @@ if not approach_data.empty:
             )
             st.plotly_chart(approach_fig, use_container_width=True)
 
-    except Exception as e:
+except Exception as e:
         st.error(f"An error occurred while generating the angle plots: {e}")
 
 
