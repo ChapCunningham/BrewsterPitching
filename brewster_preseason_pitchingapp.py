@@ -104,30 +104,33 @@ fig.update_layout(
             )
 return fig
 
-        # Create and display the release angle plot
-if not release_data.empty:
-            release_fig = create_scatter_plot(
-                release_data, 
-                'HorzRelAngle', 'VertRelAngle', 
-                "Release Angles by Pitch Type", 
-                x_lim=[-7.5, 7.5], 
-                y_lim=[-5, 3]
-            )
-            st.plotly_chart(release_fig, use_container_width=True)
 
-        # Create and display the approach angle plot
-if not approach_data.empty:
-            approach_fig = create_scatter_plot(
-                approach_data, 
-                'HorzApprAngle', 'VertApprAngle', 
-                "Approach Angles by Pitch Type", 
-                x_lim=[-6, 6], 
-                y_lim=[-12, 0]
-            )
-            st.plotly_chart(approach_fig, use_container_width=True)
+try:
+    # Create and display the release angle plot
+    if not release_data.empty:
+        release_fig = create_scatter_plot(
+            release_data, 
+            'HorzRelAngle', 'VertRelAngle', 
+            "Release Angles by Pitch Type", 
+            x_lim=[-7.5, 7.5], 
+            y_lim=[-5, 3]
+        )
+        st.plotly_chart(release_fig, use_container_width=True)
+
+    # Create and display the approach angle plot
+    if not approach_data.empty:
+        approach_fig = create_scatter_plot(
+            approach_data, 
+            'HorzApprAngle', 'VertApprAngle', 
+            "Approach Angles by Pitch Type", 
+            x_lim=[-6, 6], 
+            y_lim=[-12, 0]
+        )
+        st.plotly_chart(approach_fig, use_container_width=True)
 
 except Exception as e:
-        st.error(f"An error occurred while generating the angle plots: {e}")
+    st.error(f"An error occurred while generating the angle plots: {e}")
+
 
 
 def plot_heatmaps(pitcher_name, batter_side, strikes, balls, date_filter_option, selected_date, start_date, end_date, map_type):
