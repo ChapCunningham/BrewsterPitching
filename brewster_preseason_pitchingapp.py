@@ -94,76 +94,7 @@ release_data = filtered_df.dropna(subset=['HorzRelAngle', 'VertRelAngle'])
 approach_data = filtered_df.dropna(subset=['HorzApprAngle', 'VertApprAngle'])
 
 
-# Define Plotly color equivalents for pitch types (make available globally)
-plotly_color_dict = {
-    'Fastball': 'royalblue',
-    'Sinker': 'goldenrod',
-    'Slider': 'mediumseagreen',
-    'Curveball': 'firebrick',
-    'Cutter': 'darkorange',
-    'ChangeUp': 'mediumpurple',
-    'Splitter': 'teal',
-    'Unknown': 'black',
-    'Other': 'black'
-}
 
-
-# Function to create a scatter plot with bounding circles and average values
-def create_scatter_plot(data, x_col, y_col, title, x_lim, y_lim):
-    fig = go.Figure()
-
-    # Get unique pitch types
-    unique_pitch_types = data['TaggedPitchType'].unique()
-
-    for pitch_type in unique_pitch_types:
-        pitch_type_data = data[data['TaggedPitchType'] == pitch_type]
-
-        # Calculate mean and standard deviation for bounding circle
-        mean_x = pitch_type_data[x_col].mean()
-        mean_y = pitch_type_data[y_col].mean()
-        std_dev_x = pitch_type_data[x_col].std()
-        std_dev_y = pitch_type_data[y_col].std()
-
-        # Format average values for legend
-        avg_label = f"{pitch_type} ({mean_x:.1f}, {mean_y:.1f})"
-
-        # Plot scatter points
-        fig.add_trace(go.Scatter(
-            x=pitch_type_data[x_col],
-            y=pitch_type_data[y_col],
-            mode='markers',
-            name=avg_label,
-            marker=dict(
-                size=8,
-                color=plotly_color_dict.get(pitch_type, 'black'),
-                opacity=0.7
-            )
-        ))
-
-        # Draw bounding circle if data exists
-        if not (pd.isna(mean_x) or pd.isna(mean_y) or pd.isna(std_dev_x) or pd.isna(std_dev_y)):
-            radius = max(std_dev_x, std_dev_y)
-            fig.add_shape(
-                type="circle",
-                xref="x", yref="y",
-                x0=mean_x - radius, y0=mean_y - radius,
-                x1=mean_x + radius, y1=mean_y + radius,
-                line=dict(color=plotly_color_dict.get(pitch_type, 'black'), width=2),
-                opacity=0.3
-            )
-
-    # Customize layout with limits
-    fig.update_layout(
-        title=title,
-        xaxis=dict(title=x_col, range=x_lim),
-        yaxis=dict(title=y_col, range=y_lim),
-        template="plotly_white",
-        showlegend=True,
-        width=800,
-        height=700
-    )
-
-    return fig  # <-- This was over-indented
 
 # Then this try block comes after the function:
 try:
@@ -1178,7 +1109,76 @@ def plot_release_and_approach_angles(pitcher_name, batter_side, strikes, balls, 
 
 
 
+# Define Plotly color equivalents for pitch types (make available globally)
+plotly_color_dict = {
+    'Fastball': 'royalblue',
+    'Sinker': 'goldenrod',
+    'Slider': 'mediumseagreen',
+    'Curveball': 'firebrick',
+    'Cutter': 'darkorange',
+    'ChangeUp': 'mediumpurple',
+    'Splitter': 'teal',
+    'Unknown': 'black',
+    'Other': 'black'
+}
 
+
+# Function to create a scatter plot with bounding circles and average values
+def create_scatter_plot(data, x_col, y_col, title, x_lim, y_lim):
+    fig = go.Figure()
+
+    # Get unique pitch types
+    unique_pitch_types = data['TaggedPitchType'].unique()
+
+    for pitch_type in unique_pitch_types:
+        pitch_type_data = data[data['TaggedPitchType'] == pitch_type]
+
+        # Calculate mean and standard deviation for bounding circle
+        mean_x = pitch_type_data[x_col].mean()
+        mean_y = pitch_type_data[y_col].mean()
+        std_dev_x = pitch_type_data[x_col].std()
+        std_dev_y = pitch_type_data[y_col].std()
+
+        # Format average values for legend
+        avg_label = f"{pitch_type} ({mean_x:.1f}, {mean_y:.1f})"
+
+        # Plot scatter points
+        fig.add_trace(go.Scatter(
+            x=pitch_type_data[x_col],
+            y=pitch_type_data[y_col],
+            mode='markers',
+            name=avg_label,
+            marker=dict(
+                size=8,
+                color=plotly_color_dict.get(pitch_type, 'black'),
+                opacity=0.7
+            )
+        ))
+
+        # Draw bounding circle if data exists
+        if not (pd.isna(mean_x) or pd.isna(mean_y) or pd.isna(std_dev_x) or pd.isna(std_dev_y)):
+            radius = max(std_dev_x, std_dev_y)
+            fig.add_shape(
+                type="circle",
+                xref="x", yref="y",
+                x0=mean_x - radius, y0=mean_y - radius,
+                x1=mean_x + radius, y1=mean_y + radius,
+                line=dict(color=plotly_color_dict.get(pitch_type, 'black'), width=2),
+                opacity=0.3
+            )
+
+    # Customize layout with limits
+    fig.update_layout(
+        title=title,
+        xaxis=dict(title=x_col, range=x_lim),
+        yaxis=dict(title=y_col, range=y_lim),
+        template="plotly_white",
+        showlegend=True,
+        width=800,
+        height=700
+    )
+
+    return fig  # <-- This was over-indented
 
 
 
