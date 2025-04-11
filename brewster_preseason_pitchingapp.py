@@ -362,6 +362,8 @@ def load_class_plus_data(file_path):
     
     return df
 
+class_plus_file_path = "Brewster_2025_CLASS+.csv"
+
 class_plus_df = load_class_plus_data(class_plus_file_path)
 
 
@@ -370,7 +372,6 @@ class_plus_df = load_class_plus_data(class_plus_file_path)
 season_class_plus_file_path = "Brewster_2025_CLASS+.csv"
 
 #
-class_plus_file_path = "Brewster_2025_CLASS+.csv"
 
 # Load Spring CLASS+ CSV
 @st.cache_data
