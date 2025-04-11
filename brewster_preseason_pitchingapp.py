@@ -102,8 +102,7 @@ fig.update_layout(
                 width=800,
                 height=700
             )
-
-            return fig
+return fig
 
         # Create and display the release angle plot
         if not release_data.empty:
