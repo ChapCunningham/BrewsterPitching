@@ -403,15 +403,13 @@ season_class_plus_df = load_season_class_plus_data(season_class_plus_file_path)
 
 def generate_pitch_traits_table(pitcher_name, batter_side, strikes, balls, date_filter_option, selected_date, start_date, end_date):
     try:
-        # Filter data based on input parameters
+        # Filter data
         pitcher_data = filter_data(pitcher_name, batter_side, strikes, balls, date_filter_option, selected_date, start_date, end_date)
-
-        # Check if filtered data is empty
         if pitcher_data.empty:
             st.write("No data available for the selected parameters.")
             return
 
-        # Group by 'TaggedPitchType' and calculate aggregated metrics
+        # Group by pitch type and calculate means
         grouped_data = pitcher_data.groupby('TaggedPitchType').agg(
             Count=('TaggedPitchType', 'size'),
             RelSpeed=('RelSpeed', 'mean'),
@@ -424,7 +422,6 @@ def generate_pitch_traits_table(pitcher_name, batter_side, strikes, balls, date_
             VertApprAngle=('VertApprAngle', 'mean')
         ).reset_index()
 
-        # Rename columns for clarity
         rename_columns = {
             'TaggedPitchType': 'Pitch',
             'RelSpeed': 'Velo',
@@ -438,61 +435,33 @@ def generate_pitch_traits_table(pitcher_name, batter_side, strikes, balls, date_
         }
         grouped_data = grouped_data.rename(columns=rename_columns)
 
-        # Convert all numeric columns to numeric format and coerce errors to NaN
+        # Clean and round numeric columns
         numeric_columns = ['Velo', 'iVB', 'HB', 'Spin', 'RelH', 'RelS', 'Ext', 'VAA']
         for col in numeric_columns:
             grouped_data[col] = pd.to_numeric(grouped_data[col], errors='coerce')
+        grouped_data[numeric_columns] = grouped_data[numeric_columns].round(1)
 
-        # Round numeric columns to 1 decimal place
-        grouped_data[numeric_columns] = grouped_data[numeric_columns].apply(lambda x: x.round(1))
-
-        # Select CLASS+ data based on dataset selection
-        # Select CLASS+ data based on dataset selection
-        if dataset_selection == 'Fall':
-            filtered_class_plus = class_plus_df[class_plus_df["playerFullName"] == pitcher_name]
-        elif dataset_selection == 'Winter':
-            filtered_class_plus = winter_class_plus_df[winter_class_plus_df["playerFullName"] == pitcher_name]
-        elif dataset_selection == 'Spring Preseason':
-            filtered_class_plus = spring_class_plus_df[spring_class_plus_df["playerFullName"] == pitcher_name]
-        elif dataset_selection == '2025 Season':
-            filtered_class_plus = season_class_plus_df[season_class_plus_df["playerFullName"] == pitcher_name]
-        else:  # "All"
-            filtered_class_plus = all_class_plus_df[all_class_plus_df["playerFullName"] == pitcher_name]
-
-            filtered_class_plus = (
-                filtered_class_plus.groupby("PitchType")
-                .apply(lambda x: pd.Series({
-                    "CLASS+": np.average(x["CLASS+"], weights=x["Count"]) if "Count" in x else x["CLASS+"].mean()
-                }))
-                .reset_index()
-            )
-
-        # Merge aggregated data with CLASS+ scores
+        # Merge with CLASS+ data (2025 only)
+        filtered_class_plus = season_class_plus_df[season_class_plus_df["playerFullName"] == pitcher_name]
         grouped_data = pd.merge(
             grouped_data,
-            filtered_class_plus[["PitchType", "CLASS+"]],  # Select only relevant columns
+            filtered_class_plus[["PitchType", "CLASS+"]], 
             how="left",
             left_on="Pitch",
             right_on="PitchType"
         )
-
-        # Drop redundant 'PitchType' column and fill missing CLASS+ scores with "N/A"
         grouped_data = grouped_data.drop(columns=["PitchType"], errors="ignore")
         grouped_data["CLASS+"] = pd.to_numeric(grouped_data["CLASS+"], errors="coerce").fillna("N/A")
 
-        # Sort by 'Count' (most frequently thrown pitches first)
+        # Sort and add 'All' row
         grouped_data = grouped_data.sort_values(by='Count', ascending=False)
-
-        # Calculate "All" row
         total_count = grouped_data["Count"].sum()
         weighted_averages = {
-            column: np.average(
-                grouped_data[column].dropna(), weights=grouped_data["Count"].loc[grouped_data[column].notna()]
-            ) if grouped_data[column].notna().any() else "N/A"
-            for column in numeric_columns
+            col: np.average(grouped_data[col].dropna(), weights=grouped_data["Count"].loc[grouped_data[col].notna()])
+            if grouped_data[col].notna().any() else "N/A"
+            for col in numeric_columns
         }
 
-        # Calculate the weighted average for CLASS+
         valid_class_plus = grouped_data.loc[grouped_data["CLASS+"] != "N/A", "CLASS+"].astype(float)
         valid_class_plus_weights = grouped_data.loc[grouped_data["CLASS+"] != "N/A", "Count"]
         class_plus_weighted_avg = (
@@ -513,20 +482,16 @@ def generate_pitch_traits_table(pitcher_name, batter_side, strikes, balls, date_
             'CLASS+': round(class_plus_weighted_avg, 1) if pd.notna(class_plus_weighted_avg) else 'N/A'
         }
 
-        # Append "All" row to the DataFrame
-        all_row_df = pd.DataFrame([all_row])
-        grouped_data = pd.concat([grouped_data, all_row_df], ignore_index=True)
+        grouped_data = pd.concat([grouped_data, pd.DataFrame([all_row])], ignore_index=True)
 
-        # Format the data before displaying
+        # Display table
         formatted_data = format_dataframe(grouped_data)
-
-        # Display the results in Streamlit
         st.subheader("Pitch Traits:")
         st.dataframe(formatted_data)
-    except KeyError as ke:
-        st.error(f"Key error encountered: {ke}. Please check the input data and column names.")
+
     except Exception as e:
         st.error(f"An error occurred while generating the pitch traits table: {e}")
+
 
 
 
