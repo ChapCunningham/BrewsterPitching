@@ -342,7 +342,7 @@ def format_dataframe(df):
     return df
 
 # Load CLASS+ CSV into a DataFrame
-class_plus_file_path = "player_pitch_summary_with_count (10).csv"  # Replace with the actual path
+
 
 @st.cache_data
 def load_class_plus_data(file_path):
@@ -365,54 +365,11 @@ def load_class_plus_data(file_path):
 class_plus_df = load_class_plus_data(class_plus_file_path)
 
 
-# File path for Winter CLASS+ dataset
-winter_class_plus_file_path = "winter_CLASS+.csv"
-
-# Load Winter CLASS+ CSV
-@st.cache_data
-def load_winter_class_plus_data(file_path):
-    df = pd.read_csv(file_path)
-    df['Season'] = 'Winter'  # Add season identifier
-    # Rename pitch types to match other datasets
-    df["PitchType"] = df["PitchType"].map({
-        "4S": "Fastball",
-        "SI": "Sinker",
-        "FC": "Cutter",
-        "SL": "Slider",
-        "CU": "Curveball",
-        "FS": "Splitter",
-        "CH": "ChangeUp"
-    })
-    return df
-
-# Load the Winter CLASS+ dataset
-winter_class_plus_df = load_winter_class_plus_data(winter_class_plus_file_path)
 
 
-# File path for Spring CLASS+ dataset
-spring_class_plus_file_path = "spring_CLASS+.csv"
+season_class_plus_file_path = "Brewster_2025_CLASS+.csv"
 
-season_class_plus_file_path = "2025_CLASS+.csv"
-
-# Load Spring CLASS+ CSV
-@st.cache_data
-def load_spring_class_plus_data(file_path):
-    df = pd.read_csv(file_path)
-    df['Season'] = 'Spring Preseason'  # Add season identifier
-    # Rename pitch types to match other datasets
-    df["PitchType"] = df["PitchType"].map({
-        "4S": "Fastball",
-        "SI": "Sinker",
-        "FC": "Cutter",
-        "SL": "Slider",
-        "CU": "Curveball",
-        "FS": "Splitter",
-        "CH": "ChangeUp"
-    })
-    return df
-
-# Load the Spring CLASS+ dataset
-spring_class_plus_df = load_spring_class_plus_data(spring_class_plus_file_path)
+#
 
 
 # Load Spring CLASS+ CSV
@@ -436,11 +393,7 @@ def load_season_class_plus_data(file_path):
 season_class_plus_df = load_season_class_plus_data(season_class_plus_file_path)
 
 
-# Add Season identifier to Fall CLASS+ dataset
-class_plus_df['Season'] = 'Fall'
 
-# Combine Fall and Winter CLASS+ datasets
-all_class_plus_df = pd.concat([class_plus_df, winter_class_plus_df, spring_class_plus_df,season_class_plus_df])
 
 
 
