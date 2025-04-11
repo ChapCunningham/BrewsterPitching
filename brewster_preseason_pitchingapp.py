@@ -94,6 +94,18 @@ release_data = filtered_df.dropna(subset=['HorzRelAngle', 'VertRelAngle'])
 approach_data = filtered_df.dropna(subset=['HorzApprAngle', 'VertApprAngle'])
 
 
+# Define Plotly color equivalents for pitch types (make available globally)
+plotly_color_dict = {
+    'Fastball': 'royalblue',
+    'Sinker': 'goldenrod',
+    'Slider': 'mediumseagreen',
+    'Curveball': 'firebrick',
+    'Cutter': 'darkorange',
+    'ChangeUp': 'mediumpurple',
+    'Splitter': 'teal',
+    'Unknown': 'black',
+    'Other': 'black'
+}
 
 
 # Function to create a scatter plot with bounding circles and average values
