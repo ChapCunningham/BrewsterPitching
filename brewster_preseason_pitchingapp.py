@@ -94,17 +94,7 @@ release_data = filtered_df.dropna(subset=['HorzRelAngle', 'VertRelAngle'])
 approach_data = filtered_df.dropna(subset=['HorzApprAngle', 'VertApprAngle'])
 
 
-plotly_color_dict = {
-            'Fastball': 'royalblue',
-            'Sinker': 'goldenrod',
-            'Slider': 'mediumseagreen',
-            'Curveball': 'firebrick',
-            'Cutter': 'darkorange',
-            'ChangeUp': 'mediumpurple',
-            'Splitter': 'teal',
-            'Unknown': 'black',
-            'Other': 'black'
-        }
+
 
 # Function to create a scatter plot with bounding circles and average values
 def create_scatter_plot(data, x_col, y_col, title, x_lim, y_lim):
@@ -1048,6 +1038,17 @@ def generate_rolling_line_graphs(
         st.error(f"An error occurred while generating rolling line graphs: {e}")
 
 
+plotly_color_dict = {
+            'Fastball': 'royalblue',
+            'Sinker': 'goldenrod',
+            'Slider': 'mediumseagreen',
+            'Curveball': 'firebrick',
+            'Cutter': 'darkorange',
+            'ChangeUp': 'mediumpurple',
+            'Splitter': 'teal',
+            'Unknown': 'black',
+            'Other': 'black'
+        }
 
 import plotly.graph_objects as go
 
