@@ -214,7 +214,7 @@ def plot_heatmaps(pitcher_name, batter_side, strikes, balls, date_filter_option,
 
         # Add a main title for all the heatmaps
         season = pitcher_data['Season'].iloc[0] if 'Season' in pitcher_data.columns else "Unknown"
-        plt.suptitle(f"{pitcher_name} {map_type} Heatmap ({season} Season)", 
+        plt.suptitle(f"{pitcher_name} {map_type} Heatmap (2025 College Season)", 
                      fontsize=30, fontweight='bold')
         
         # Adjust the layout to prevent overlap
