@@ -538,6 +538,7 @@ color_dict = {
     'Curveball': 'red',
     'Cutter': 'orange',
     'ChangeUp': 'purple',
+    'Changeup': 'purple',
     'Splitter': 'teal',
     'Unknown': 'black',
     'Other': 'black'
@@ -577,6 +578,7 @@ def plot_pitch_movement(pitcher_name, batter_side, strikes, balls, date_filter_o
             'Curveball': 'firebrick',
             'Cutter': 'darkorange',
             'ChangeUp': 'mediumpurple',
+            'Changeup': 'mediumpurple',
             'Splitter': 'teal',
             'Unknown': 'black',
             'Other': 'black'
