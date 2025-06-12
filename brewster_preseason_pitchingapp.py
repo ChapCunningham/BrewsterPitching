@@ -532,6 +532,7 @@ def generate_plate_discipline_table(pitcher_name, batter_side, strikes, balls, d
 # Define a color dictionary for each pitch type
 color_dict = {
     'Fastball': 'blue',
+    'Four-Seam': 'blue',
     'Sinker': 'gold',
     'Slider': 'green',
     'Curveball': 'red',
@@ -570,6 +571,7 @@ def plot_pitch_movement(pitcher_name, batter_side, strikes, balls, date_filter_o
         # Define Plotly color equivalents for pitch types
         plotly_color_dict = {
             'Fastball': 'royalblue',
+            'Four-Seam': 'royalblue',
             'Sinker': 'goldenrod',
             'Slider': 'mediumseagreen',
             'Curveball': 'firebrick',
@@ -962,6 +964,7 @@ def generate_rolling_line_graphs(
 
 plotly_color_dict = {
             'Fastball': 'royalblue',
+            'Four-Seam': 'blue',
             'Sinker': 'goldenrod',
             'Slider': 'mediumseagreen',
             'Curveball': 'firebrick',
@@ -995,6 +998,7 @@ def plot_release_and_approach_angles(pitcher_name, batter_side, strikes, balls, 
         # Define Plotly color equivalents for pitch types
         plotly_color_dict = {
             'Fastball': 'royalblue',
+            'Four-Seam': 'blue',
             'Sinker': 'goldenrod',
             'Slider': 'mediumseagreen',
             'Curveball': 'firebrick',
@@ -1093,6 +1097,7 @@ def plot_release_and_approach_angles(pitcher_name, batter_side, strikes, balls, 
 # Define Plotly color equivalents for pitch types (make available globally)
 plotly_color_dict = {
     'Fastball': 'royalblue',
+    'Four-Seam': 'blue',
     'Sinker': 'goldenrod',
     'Slider': 'mediumseagreen',
     'Curveball': 'firebrick',
