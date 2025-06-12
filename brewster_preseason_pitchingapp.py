@@ -402,7 +402,8 @@ def generate_pitch_traits_table(pitcher_name, batter_side, strikes, balls, date_
             'RelS': round(weighted_averages['RelS'], 1) if pd.notna(weighted_averages['RelS']) else 'N/A',
             'Ext': round(weighted_averages['Ext'], 1) if pd.notna(weighted_averages['Ext']) else 'N/A',
             'VAA': round(weighted_averages['VAA'], 1) if pd.notna(weighted_averages['VAA']) else 'N/A',
-            'xRV+": round(class_plus_weighted_avg, 1) if pd.notna(class_plus_weighted_avg) else 'N/A'
+            f"xRV+: {round(class_plus_weighted_avg, 1)}" if pd.notna(class_plus_weighted_avg) else "xRV+: N/A"
+
         }
 
         grouped_data = pd.concat([grouped_data, pd.DataFrame([all_row])], ignore_index=True)
