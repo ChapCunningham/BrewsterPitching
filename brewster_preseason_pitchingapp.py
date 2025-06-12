@@ -365,7 +365,7 @@ def generate_pitch_traits_table(pitcher_name, batter_side, strikes, balls, date_
         grouped_data[numeric_columns] = grouped_data[numeric_columns].round(1)
 
         # Merge with CLASS+ data (2025 only)
-        filtered_class_plus = season_class_plus_df[season_class_plus_df["playerFullName"] == pitcher_name]
+        filtered_class_plus = season_class_plus_df[season_class_plus_df["Pitcher"] == pitcher_name]
         grouped_data = pd.merge(
             grouped_data,
             filtered_class_plus["AutoPitchType", "xRV+"], 
@@ -791,7 +791,7 @@ def generate_rolling_line_graphs(
             view_option = "Full Dataset Rolling Averages"  # Default for other date selections
 
         # Filter only by pitcher name (keep full data for rolling averages)
-        full_filtered_data = rolling_df[rolling_df['playerFullName'] == pitcher_name]
+        full_filtered_data = rolling_df[rolling_df['Pitcher'] == pitcher_name]
 
         if full_filtered_data.empty:
             st.write("No data available for the selected pitcher.")
