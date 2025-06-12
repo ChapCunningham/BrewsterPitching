@@ -28,7 +28,7 @@ numeric_columns = ['RelSpeed', 'SpinRate', 'Tilt', 'RelHeight', 'RelSide',
 for col in numeric_columns:
     season_df[col] = pd.to_numeric(season_df[col], errors='coerce')
 
-# === LOAD ROLLING AND CLASS+ DATA ===
+# === LOAD ROLLING AND xRV+ DATA ===
 rolling_path = "YD_2025_xRV+_by_date.csv"
 class_plus_path = "YD_2025_xRV+.csv"
 
@@ -267,14 +267,14 @@ def format_dataframe(df):
 
     return df
 
-# Load CLASS+ CSV into a DataFrame
+# Load xRV+ CSV into a DataFrame
 
 
 @st.cache_data
 def load_class_plus_data(file_path):
     df = pd.read_csv(file_path)
     
-    # Rename Pitch Types in CLASS+ DataFrame to match Streamlit app
+    # Rename Pitch Types in xRV+ DataFrame to match Streamlit app
     pitch_type_mapping = {
         "4S": "Fastball",
         "SI": "Sinker",
@@ -288,18 +288,18 @@ def load_class_plus_data(file_path):
     
     return df
 
-class_plus_file_path = "Brewster_2025_CLASS+.csv"
+class_plus_file_path = "YD_2025_xRV+.csv"
 
 class_plus_df = load_class_plus_data(class_plus_file_path)
 
 
 
 
-season_class_plus_file_path = "Brewster_2025_CLASS+.csv"
+season_class_plus_file_path = "YD_2025_xRV+.csv"
 
 #
 
-# Load Spring CLASS+ CSV
+# Load Spring xRV+ CSV
 @st.cache_data
 def load_season_class_plus_data(file_path):
     df = pd.read_csv(file_path)
@@ -316,7 +316,7 @@ def load_season_class_plus_data(file_path):
     })
     return df
 
-# Load the Spring CLASS+ dataset
+# Load the Spring xRV+ dataset
 season_class_plus_df = load_season_class_plus_data(season_class_plus_file_path)
 
 
@@ -368,13 +368,13 @@ def generate_pitch_traits_table(pitcher_name, batter_side, strikes, balls, date_
         filtered_class_plus = season_class_plus_df[season_class_plus_df["playerFullName"] == pitcher_name]
         grouped_data = pd.merge(
             grouped_data,
-            filtered_class_plus[["PitchType", "CLASS+"]], 
+            filtered_class_plus[["PitchType", "xRV+]], 
             how="left",
             left_on="Pitch",
             right_on="PitchType"
         )
         grouped_data = grouped_data.drop(columns=["PitchType"], errors="ignore")
-        grouped_data["CLASS+"] = pd.to_numeric(grouped_data["CLASS+"], errors="coerce").fillna("N/A")
+        grouped_data["xRV+"] = pd.to_numeric(grouped_data["xRV+"], errors="coerce").fillna("N/A")
 
         # Sort and add 'All' row
         grouped_data = grouped_data.sort_values(by='Count', ascending=False)
@@ -385,8 +385,8 @@ def generate_pitch_traits_table(pitcher_name, batter_side, strikes, balls, date_
             for col in numeric_columns
         }
 
-        valid_class_plus = grouped_data.loc[grouped_data["CLASS+"] != "N/A", "CLASS+"].astype(float)
-        valid_class_plus_weights = grouped_data.loc[grouped_data["CLASS+"] != "N/A", "Count"]
+        valid_class_plus = grouped_data.loc[grouped_data["xRV+"] != "N/A", "xRV+"].astype(float)
+        valid_class_plus_weights = grouped_data.loc[grouped_data["xRV+"] != "N/A", "Count"]
         class_plus_weighted_avg = (
             np.average(valid_class_plus, weights=valid_class_plus_weights) if not valid_class_plus.empty else "N/A"
         )
