@@ -34,15 +34,7 @@ class_plus_path = "YD_2025_xRV+.csv"
 
 rolling_df = load_data(rolling_path)
 class_plus_df = pd.read_csv(class_plus_path)
-class_plus_df["AutoPitchType"] = class_plus_df["AutoPitchType"].map({
-    "4S": "Fastball",
-    "SI": "Sinker",
-    "FC": "Cutter",
-    "SL": "Slider",
-    "CU": "Curveball",
-    "FS": "Splitter",
-    "CH": "ChangeUp"
-})
+
 class_plus_df["Season"] = "2025 Season"
 
 # === STREAMLIT SETUP ===
@@ -295,15 +287,7 @@ def load_season_class_plus_data(file_path):
     df = pd.read_csv(file_path)
     df['Season'] = '2025 Season'  # Add season identifier
     # Rename pitch types to match other datasets
-    df["AutoPitchType"] = df["AutoPitchType"].map({
-        "4S": "Fastball",
-        "SI": "Sinker",
-        "FC": "Cutter",
-        "SL": "Slider",
-        "CU": "Curveball",
-        "FS": "Splitter",
-        "CH": "ChangeUp"
-    })
+    
     return df
 
 # Load the Spring xRV+ dataset
@@ -820,6 +804,7 @@ def generate_rolling_line_graphs(
             'Curveball': 'red',
             'Cutter': 'orange',
             'ChangeUp': 'purple',
+            'Changeup': 'purple',
             'Splitter': 'teal',
             'Unknown': 'black',
             'Other': 'black'
