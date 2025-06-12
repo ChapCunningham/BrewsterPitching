@@ -804,7 +804,7 @@ def generate_rolling_line_graphs(
             'Spin': 'Spin',
             'RelH (ft)': 'RelH',
             'Extension': 'Extension',
-            'xRV+": 'xRV+",
+            'xRV+": 'xRV+',
         }
         for col in numeric_columns.keys():
             full_filtered_data[col] = pd.to_numeric(full_filtered_data[col], errors='coerce')
