@@ -34,7 +34,7 @@ class_plus_path = "YD_2025_xRV+.csv"
 
 rolling_df = load_data(rolling_path)
 class_plus_df = pd.read_csv(class_plus_path)
-class_plus_df["PitchType"] = class_plus_df["PitchType"].map({
+class_plus_df["AutoPitchType"] = class_plus_df["AutoPitchType"].map({
     "4S": "Fastball",
     "SI": "Sinker",
     "FC": "Cutter",
@@ -118,7 +118,7 @@ def plot_heatmaps(pitcher_name, batter_side, strikes, balls, date_filter_option,
             return
         
         # Get unique pitch types thrown by the selected pitcher
-        unique_pitch_types = plot_data['TaggedPitchType'].unique()
+        unique_pitch_types = plot_data['AutoPitchType'].unique()
         
         # Limit number of subplots per row (e.g., 3 per row)
         n_pitch_types = len(unique_pitch_types)
@@ -139,7 +139,7 @@ def plot_heatmaps(pitcher_name, batter_side, strikes, balls, date_filter_option,
 
         # Loop over each unique pitch type and create heatmaps
         for i, (ax, pitch_type) in enumerate(zip(axes, unique_pitch_types)):
-            pitch_type_data = plot_data[plot_data['TaggedPitchType'] == pitch_type]
+            pitch_type_data = plot_data[plot_data['AutoPitchType'] == pitch_type]
             
             if map_type == 'Frequency':
                 # All pitches are used for frequency maps
@@ -284,7 +284,7 @@ def load_class_plus_data(file_path):
         "FS": "Splitter",
         "CH": "ChangeUp"
     }
-    df["PitchType"] = df["PitchType"].map(pitch_type_mapping)
+    df["AutoPitchType"] = df["AutoPitchType"].map(pitch_type_mapping)
     
     return df
 
@@ -305,7 +305,7 @@ def load_season_class_plus_data(file_path):
     df = pd.read_csv(file_path)
     df['Season'] = '2025 Season'  # Add season identifier
     # Rename pitch types to match other datasets
-    df["PitchType"] = df["PitchType"].map({
+    df["AutoPitchType"] = df["AutoPitchType"].map({
         "4S": "Fastball",
         "SI": "Sinker",
         "FC": "Cutter",
@@ -333,8 +333,8 @@ def generate_pitch_traits_table(pitcher_name, batter_side, strikes, balls, date_
             return
 
         # Group by pitch type and calculate means
-        grouped_data = pitcher_data.groupby('TaggedPitchType').agg(
-            Count=('TaggedPitchType', 'size'),
+        grouped_data = pitcher_data.groupby('AutoPitchType').agg(
+            Count=('AutoPitchType', 'size'),
             RelSpeed=('RelSpeed', 'mean'),
             InducedVertBreak=('InducedVertBreak', 'mean'),
             HorizontalBreak=('HorzBreak', 'mean'),
@@ -346,7 +346,7 @@ def generate_pitch_traits_table(pitcher_name, batter_side, strikes, balls, date_
         ).reset_index()
 
         rename_columns = {
-            'TaggedPitchType': 'Pitch',
+            'AutoPitchType': 'Pitch',
             'RelSpeed': 'Velo',
             'InducedVertBreak': 'iVB',
             'HorizontalBreak': 'HB',
@@ -368,12 +368,12 @@ def generate_pitch_traits_table(pitcher_name, batter_side, strikes, balls, date_
         filtered_class_plus = season_class_plus_df[season_class_plus_df["playerFullName"] == pitcher_name]
         grouped_data = pd.merge(
             grouped_data,
-            filtered_class_plus["TaggedPitchType", "xRV+"], 
+            filtered_class_plus["AutoPitchType", "xRV+"], 
             how="left",
             left_on="Pitch",
-            right_on="PitchType"
+            right_on="AutoPitchType"
         )
-        grouped_data = grouped_data.drop(columns=["PitchType"], errors="ignore")
+        grouped_data = grouped_data.drop(columns=["AutoPitchType"], errors="ignore")
         grouped_data["xRV+"] = pd.to_numeric(grouped_data["xRV+"], errors="coerce").fillna("N/A")
 
         # Sort and add 'All' row
@@ -469,18 +469,18 @@ def generate_plate_discipline_table(pitcher_name, batter_side, strikes, balls, d
             return metrics
 
         # Group data by pitch type and calculate metrics
-        plate_discipline_data = pitcher_data.groupby('TaggedPitchType').apply(calculate_metrics).apply(pd.Series).reset_index()
+        plate_discipline_data = pitcher_data.groupby('AutoPitchType').apply(calculate_metrics).apply(pd.Series).reset_index()
 
         # Calculate pitch percentage for each pitch type
-        plate_discipline_data['Count'] = pitcher_data.groupby('TaggedPitchType')['TaggedPitchType'].count().values
+        plate_discipline_data['Count'] = pitcher_data.groupby('AutoPitchType')['AutoPitchType'].count().values
         plate_discipline_data['Pitch%'] = (plate_discipline_data['Count'] / total_pitches) * 100
 
         # Reorder columns for display
-        plate_discipline_data = plate_discipline_data[['TaggedPitchType', 'Count', 'Pitch%', 'Strike%', 'InZone%', 'Swing%', 'Whiff%', 'Chase%', 'InZoneWhiff%']]
+        plate_discipline_data = plate_discipline_data[['AutoPitchType', 'Count', 'Pitch%', 'Strike%', 'InZone%', 'Swing%', 'Whiff%', 'Chase%', 'InZoneWhiff%']]
 
         # Rename columns for readability
         rename_columns = {
-            'TaggedPitchType': 'Pitch',
+            'AutoPitchType': 'Pitch',
             'Count': 'Count',
             'Pitch%': 'Pitch%',
             'Strike%': 'Strike%',
@@ -606,10 +606,10 @@ def plot_pitch_movement(pitcher_name, batter_side, strikes, balls, date_filter_o
         )
 
         # Get unique pitch types
-        unique_pitch_types = movement_data['TaggedPitchType'].unique()
+        unique_pitch_types = movement_data['AutoPitchType'].unique()
 
         for pitch_type in unique_pitch_types:
-            pitch_data = movement_data[movement_data['TaggedPitchType'] == pitch_type]
+            pitch_data = movement_data[movement_data['AutoPitchType'] == pitch_type]
 
             # Round numeric values for hover info
             pitch_data['RelSpeed'] = pitch_data['RelSpeed'].round(1)
@@ -686,7 +686,7 @@ def generate_batted_ball_table(pitcher_name, batter_side, strikes, balls, date_f
         batted_data = pitcher_data[pitcher_data['PitchCall'] == 'InPlay']
 
         # Group by pitch type and calculate metrics
-        batted_ball_summary = batted_data.groupby('TaggedPitchType').agg(
+        batted_ball_summary = batted_data.groupby('AutoPitchType').agg(
             BIP=('PitchCall', 'size'),
             GB=('BattedType', lambda x: (x == "GroundBall").sum()),
             FB=('BattedType', lambda x: (x == "FlyBall").sum()),
@@ -696,9 +696,9 @@ def generate_batted_ball_table(pitcher_name, batter_side, strikes, balls, date_f
         ).reset_index()
 
         # Ensure all pitch types are included
-        unique_pitch_types = pitcher_data['TaggedPitchType'].unique()
-        full_summary = pd.DataFrame({'TaggedPitchType': unique_pitch_types})
-        batted_ball_summary = pd.merge(full_summary, batted_ball_summary, on='TaggedPitchType', how='left')
+        unique_pitch_types = pitcher_data['AutoPitchType'].unique()
+        full_summary = pd.DataFrame({'AutoPitchType': unique_pitch_types})
+        batted_ball_summary = pd.merge(full_summary, batted_ball_summary, on='AutoPitchType', how='left')
 
         # Fill missing values with defaults
         batted_ball_summary[['BIP', 'GB', 'FB', 'EV', 'Hard', 'Soft']] = batted_ball_summary[
@@ -706,8 +706,8 @@ def generate_batted_ball_table(pitcher_name, batter_side, strikes, balls, date_f
         ].fillna(0)
 
         # Add total pitch counts for each type
-        pitch_counts = pitcher_data.groupby('TaggedPitchType')['PitchCall'].count().reset_index(name='Count')
-        batted_ball_summary = pd.merge(batted_ball_summary, pitch_counts, on='TaggedPitchType', how='left')
+        pitch_counts = pitcher_data.groupby('AutoPitchType')['PitchCall'].count().reset_index(name='Count')
+        batted_ball_summary = pd.merge(batted_ball_summary, pitch_counts, on='AutoPitchType', how='left')
 
         # Calculate percentages
         batted_ball_summary['GB%'] = ((batted_ball_summary['GB'] / batted_ball_summary['BIP']) * 100).fillna(0).round(1).astype(str) + '%'
@@ -722,9 +722,9 @@ def generate_batted_ball_table(pitcher_name, batter_side, strikes, balls, date_f
             return (contact / swings * 100) if swings > 0 else 0
 
         contact_values = []
-        for pitch_type in batted_ball_summary['TaggedPitchType']:
+        for pitch_type in batted_ball_summary['AutoPitchType']:
             contact_values.append(
-                calculate_contact(pitcher_data[pitcher_data['TaggedPitchType'] == pitch_type])
+                calculate_contact(pitcher_data[pitcher_data['AutoPitchType'] == pitch_type])
             )
         batted_ball_summary['Contact%'] = [f"{round(val, 1)}%" for val in contact_values]
 
@@ -733,7 +733,7 @@ def generate_batted_ball_table(pitcher_name, batter_side, strikes, balls, date_f
 
         # Rename columns for display
         rename_columns = {
-            'TaggedPitchType': 'Pitch',
+            'AutoPitchType': 'Pitch',
             'Count': 'Count',
             'BIP': 'BIP',
             'EV': 'EV',
@@ -859,9 +859,9 @@ def generate_rolling_line_graphs(
                     rolling_data,
                     x="Date",
                     y=metric,
-                    color="PitchType",
+                    color="AutoPitchType",
                     title=f"{metric_label} Rolling Averages by Pitch Type (Full Dataset)",
-                    labels={"Date": "Date", metric: metric_label, "PitchType": "Pitch Type"},
+                    labels={"Date": "Date", metric: metric_label, "AutoPitchType": "Pitch Type"},
                     color_discrete_map=color_dict,
                     hover_data={"Date": "|%B %d, %Y", metric: ":.2f"},
                 )
@@ -921,9 +921,9 @@ def generate_rolling_line_graphs(
                     pitch_data,
                     x="PitchNo",
                     y=metric,
-                    color="PitchType",
+                    color="AutoPitchType",
                     title=f"{metric_label} Pitch-by-Pitch",
-                    labels={"PitchNo": "Pitch Number", metric: metric_label, "PitchType": "Pitch Type"},
+                    labels={"PitchNo": "Pitch Number", metric: metric_label, "AutoPitchType": "Pitch Type"},
                     color_discrete_map=color_dict,
                     hover_data={"PitchNo": ":.0f", metric: ":.2f"},
                 )
@@ -967,6 +967,7 @@ plotly_color_dict = {
             'Curveball': 'firebrick',
             'Cutter': 'darkorange',
             'ChangeUp': 'mediumpurple',
+            'Changeup': 'mediumpurple',
             'Splitter': 'teal',
             'Unknown': 'black',
             'Other': 'black'
@@ -999,6 +1000,7 @@ def plot_release_and_approach_angles(pitcher_name, batter_side, strikes, balls, 
             'Curveball': 'firebrick',
             'Cutter': 'darkorange',
             'ChangeUp': 'mediumpurple',
+            'Changeup': 'mediumpurple',
             'Splitter': 'teal',
             'Unknown': 'black',
             'Other': 'black'
@@ -1009,10 +1011,10 @@ def plot_release_and_approach_angles(pitcher_name, batter_side, strikes, balls, 
             fig = go.Figure()
 
             # Get unique pitch types
-            unique_pitch_types = data['TaggedPitchType'].unique()
+            unique_pitch_types = data['AutoPitchType'].unique()
 
             for pitch_type in unique_pitch_types:
-                pitch_type_data = data[data['TaggedPitchType'] == pitch_type]
+                pitch_type_data = data[data['AutoPitchType'] == pitch_type]
 
                 # Calculate mean and standard deviation for bounding circle
                 mean_x = pitch_type_data[x_col].mean()
@@ -1096,6 +1098,7 @@ plotly_color_dict = {
     'Curveball': 'firebrick',
     'Cutter': 'darkorange',
     'ChangeUp': 'mediumpurple',
+    'Changeup': 'mediumpurple',
     'Splitter': 'teal',
     'Unknown': 'black',
     'Other': 'black'
@@ -1107,10 +1110,10 @@ def create_scatter_plot(data, x_col, y_col, title, x_lim, y_lim):
     fig = go.Figure()
 
     # Get unique pitch types
-    unique_pitch_types = data['TaggedPitchType'].unique()
+    unique_pitch_types = data['AutoPitchType'].unique()
 
     for pitch_type in unique_pitch_types:
-        pitch_type_data = data[data['TaggedPitchType'] == pitch_type]
+        pitch_type_data = data[data['AutoPitchType'] == pitch_type]
 
         # Calculate mean and standard deviation for bounding circle
         mean_x = pitch_type_data[x_col].mean()
