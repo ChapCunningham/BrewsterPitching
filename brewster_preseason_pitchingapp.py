@@ -827,10 +827,10 @@ def generate_rolling_line_graphs(
             "FS": "Splitter",
             "CH": "ChangeUp",
         }
-        full_filtered_data['PitchType'] = full_filtered_data['PitchType'].map(pitch_type_mapping)
+        full_filtered_data['AutoPitchType'] = full_filtered_data['AutoPitchType'].map(pitch_type_mapping)
 
         # Get unique pitch types
-        unique_pitch_types = full_filtered_data['PitchType'].unique()
+        unique_pitch_types = full_filtered_data['AutoPitchType'].unique()
 
         # Define color mapping
         color_dict = {
@@ -849,7 +849,7 @@ def generate_rolling_line_graphs(
         if view_option == "Full Dataset Rolling Averages":
             # Sort data by date for proper rolling trend
             rolling_data = (
-                full_filtered_data.groupby(['Date', 'PitchType'])
+                full_filtered_data.groupby(['Date', 'AutoPitchType'])
                 .agg({col: 'mean' for col in numeric_columns.keys()})
                 .reset_index()
                 .sort_values(by="Date")
@@ -871,7 +871,7 @@ def generate_rolling_line_graphs(
 
                 # Scatter points for each date
                 for pitch_type in unique_pitch_types:
-                    pitch_subset = rolling_data[rolling_data['PitchType'] == pitch_type]
+                    pitch_subset = rolling_data[rolling_data['AutoPitchType'] == pitch_type]
                     fig.add_scatter(
                         x=pitch_subset['Date'],
                         y=pitch_subset[metric],
@@ -933,7 +933,7 @@ def generate_rolling_line_graphs(
 
                 # Scatter points for each pitch
                 for pitch_type in unique_pitch_types:
-                    pitch_subset = pitch_data[pitch_data['PitchType'] == pitch_type]
+                    pitch_subset = pitch_data[pitch_data['AutoPitchType'] == pitch_type]
                     fig.add_scatter(
                         x=pitch_subset['PitchNo'],
                         y=pitch_subset[metric],
