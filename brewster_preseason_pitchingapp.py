@@ -274,17 +274,7 @@ def format_dataframe(df):
 def load_class_plus_data(file_path):
     df = pd.read_csv(file_path)
     
-    # Rename Pitch Types in xRV+ DataFrame to match Streamlit app
-    pitch_type_mapping = {
-        "4S": "Fastball",
-        "SI": "Sinker",
-        "FC": "Cutter",
-        "SL": "Slider",
-        "CU": "Curveball",
-        "FS": "Splitter",
-        "CH": "ChangeUp"
-    }
-    df["AutoPitchType"] = df["AutoPitchType"].map(pitch_type_mapping)
+    
     
     return df
 
@@ -817,17 +807,7 @@ def generate_rolling_line_graphs(
         full_filtered_data['Date'] = pd.to_datetime(full_filtered_data['Date'], errors='coerce')
         full_filtered_data = full_filtered_data.dropna(subset=['Date'])
 
-        # Rename pitch types for clarity
-        pitch_type_mapping = {
-            "4S": "Fastball",
-            "SI": "Sinker",
-            "FC": "Cutter",
-            "SL": "Slider",
-            "CU": "Curveball",
-            "FS": "Splitter",
-            "CH": "ChangeUp",
-        }
-        full_filtered_data['AutoPitchType'] = full_filtered_data['AutoPitchType'].map(pitch_type_mapping)
+       
 
         # Get unique pitch types
         unique_pitch_types = full_filtered_data['AutoPitchType'].unique()
