@@ -803,10 +803,10 @@ def generate_rolling_line_graphs(
 
         # Ensure numeric conversion for selected metrics
         numeric_columns = {
-            'Vel': 'Velocity',
-            'IndVertBrk': 'iVB',
-            'HorzBrk': 'HB',
-            'Spin': 'Spin',
+            'RelSpeed': 'Velocity',
+            'InducedVertBreak': 'iVB',
+            'HorzBreak': 'HB',
+            'SpinRate': 'Spin',
             'Extension': 'Extension',
             'xRV+': 'xRV+'
         }
