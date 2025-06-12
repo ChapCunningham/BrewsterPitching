@@ -368,7 +368,7 @@ def generate_pitch_traits_table(pitcher_name, batter_side, strikes, balls, date_
         filtered_class_plus = season_class_plus_df[season_class_plus_df["Pitcher"] == pitcher_name]
         grouped_data = pd.merge(
             grouped_data,
-            filtered_class_plus["AutoPitchType", "xRV+"], 
+            filtered_class_plus[["AutoPitchType", "xRV+"]], 
             how="left",
             left_on="Pitch",
             right_on="AutoPitchType"
