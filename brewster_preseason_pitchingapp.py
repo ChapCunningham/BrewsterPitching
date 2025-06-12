@@ -807,7 +807,6 @@ def generate_rolling_line_graphs(
             'IndVertBrk': 'iVB',
             'HorzBrk': 'HB',
             'Spin': 'Spin',
-            'RelH (ft)': 'RelH',
             'Extension': 'Extension',
             'xRV+': 'xRV+'
         }
