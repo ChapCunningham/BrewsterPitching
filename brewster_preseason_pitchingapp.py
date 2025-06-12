@@ -19,7 +19,7 @@ def load_data(file_path):
     return df
 
 # File path for 2025 Season data
-season_file_path = "BrewsterPitchers_College_2025.csv"
+season_file_path = "YD_pitchers.csv"
 season_df = load_data(season_file_path)
 
 # Convert numeric columns
@@ -29,8 +29,8 @@ for col in numeric_columns:
     season_df[col] = pd.to_numeric(season_df[col], errors='coerce')
 
 # === LOAD ROLLING AND CLASS+ DATA ===
-rolling_path = "Brewster_2025_CLASS+_by_date.csv"
-class_plus_path = "Brewster_2025_CLASS+.csv"
+rolling_path = "YD_2025_xRV+_by_date.csv"
+class_plus_path = "YD_2025_xRV+.csv"
 
 rolling_df = load_data(rolling_path)
 class_plus_df = pd.read_csv(class_plus_path)
@@ -402,7 +402,7 @@ def generate_pitch_traits_table(pitcher_name, batter_side, strikes, balls, date_
             'RelS': round(weighted_averages['RelS'], 1) if pd.notna(weighted_averages['RelS']) else 'N/A',
             'Ext': round(weighted_averages['Ext'], 1) if pd.notna(weighted_averages['Ext']) else 'N/A',
             'VAA': round(weighted_averages['VAA'], 1) if pd.notna(weighted_averages['VAA']) else 'N/A',
-            'CLASS+': round(class_plus_weighted_avg, 1) if pd.notna(class_plus_weighted_avg) else 'N/A'
+            'xRV+": round(class_plus_weighted_avg, 1) if pd.notna(class_plus_weighted_avg) else 'N/A'
         }
 
         grouped_data = pd.concat([grouped_data, pd.DataFrame([all_row])], ignore_index=True)
@@ -803,7 +803,7 @@ def generate_rolling_line_graphs(
             'Spin': 'Spin',
             'RelH (ft)': 'RelH',
             'Extension': 'Extension',
-            'CLASS+': 'CLASS+',
+            'xRV+": 'xRV+",
         }
         for col in numeric_columns.keys():
             full_filtered_data[col] = pd.to_numeric(full_filtered_data[col], errors='coerce')
