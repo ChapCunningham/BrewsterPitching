@@ -330,7 +330,7 @@ def generate_pitch_traits_table(pitcher_name, batter_side, strikes, balls, date_
             grouped_data,
             filtered_class_plus[["TaggedPitchType", "xRV+"]], 
             how="left",
-            left_on="Pitch",
+            left_on="TaggedPitchType",
             right_on="TaggedPitchType"
         )
         grouped_data = grouped_data.drop(columns=["TaggedPitchType"], errors="ignore")
@@ -369,7 +369,7 @@ def generate_pitch_traits_table(pitcher_name, batter_side, strikes, balls, date_
         )
 
         all_row = {
-            'Pitch': 'All',
+            'TaggedPitchType': 'All',
             'Count': total_count,
             'Velo': round(weighted_averages['Velo'], 1) if pd.notna(weighted_averages['Velo']) else 'N/A',
             'iVB': round(weighted_averages['iVB'], 1) if pd.notna(weighted_averages['iVB']) else 'N/A',
