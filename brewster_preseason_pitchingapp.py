@@ -319,18 +319,7 @@ def generate_pitch_traits_table(pitcher_name, batter_side, strikes, balls, date_
             VertApprAngle=('VertApprAngle', 'mean')
         ).reset_index()
 
-        rename_columns = {
-            'TaggedPitchType': 'Pitch',
-            'RelSpeed': 'Velo',
-            'InducedVertBreak': 'iVB',
-            'HorizontalBreak': 'HB',
-            'SpinRate': 'Spin',
-            'RelHeight': 'RelH',
-            'RelSide': 'RelS',
-            'Extension': 'Ext',
-            'VertApprAngle': 'VAA'
-        }
-        grouped_data = grouped_data.rename(columns=rename_columns)
+        
 
         # Clean and round numeric columns
         numeric_columns = ['Velo', 'iVB', 'HB', 'Spin', 'RelH', 'RelS', 'Ext', 'VAA']
@@ -349,6 +338,19 @@ def generate_pitch_traits_table(pitcher_name, batter_side, strikes, balls, date_
         )
         grouped_data = grouped_data.drop(columns=["TaggedPitchType"], errors="ignore")
         grouped_data["xRV+"] = pd.to_numeric(grouped_data["xRV+"], errors="coerce").fillna("N/A")
+
+        rename_columns = {
+            'TaggedPitchType': 'Pitch',
+            'RelSpeed': 'Velo',
+            'InducedVertBreak': 'iVB',
+            'HorizontalBreak': 'HB',
+            'SpinRate': 'Spin',
+            'RelHeight': 'RelH',
+            'RelSide': 'RelS',
+            'Extension': 'Ext',
+            'VertApprAngle': 'VAA'
+        }
+        grouped_data = grouped_data.rename(columns=rename_columns)
 
         # Sort and add 'All' row
         grouped_data = grouped_data.sort_values(by='Count', ascending=False)
