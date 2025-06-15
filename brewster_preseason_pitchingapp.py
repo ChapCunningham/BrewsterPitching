@@ -19,7 +19,7 @@ def load_data(file_path):
     return df
 
 # File path for 2025 Season data
-season_file_path = "Falmouth_Pitchers_NCAA_2025.csv"
+season_file_path = "Brewster_2025_MASTER.csv"
 season_df = load_data(season_file_path)
 
 # Convert numeric columns
@@ -29,8 +29,8 @@ for col in numeric_columns:
     season_df[col] = pd.to_numeric(season_df[col], errors='coerce')
 
 # === LOAD ROLLING AND xRV+ DATA ===
-rolling_path = "Falmouth_2025_xRV+_by_date.csv"
-class_plus_path = "Falmouth_2025_xRV+.csv"
+rolling_path = "Brewster_2025_xRV+_by_date.csv"
+class_plus_path = "Brewster_2025_xRV+.csv"
 
 rolling_df = load_data(rolling_path)
 class_plus_df = pd.read_csv(class_plus_path)
@@ -38,7 +38,7 @@ class_plus_df = pd.read_csv(class_plus_path)
 class_plus_df["Season"] = "2025 Season"
 
 # === STREAMLIT SETUP ===
-st.title("Brewster Pitcher Reports (2025 College Season)")
+st.title("Brewster Pitcher Reports (2025 CCBL Season)")
 st.sidebar.header("Filters")
 
 # Dropdowns
