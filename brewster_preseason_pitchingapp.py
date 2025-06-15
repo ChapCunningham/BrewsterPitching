@@ -318,7 +318,7 @@ def generate_pitch_traits_table(pitcher_name, batter_side, strikes, balls, date_
             Extension=('Extension', 'mean'),
             VertApprAngle=('VertApprAngle', 'mean')
         ).reset_index()
-
+        
         
 
         # Clean and round numeric columns
@@ -351,6 +351,10 @@ def generate_pitch_traits_table(pitcher_name, batter_side, strikes, balls, date_
             'VertApprAngle': 'VAA'
         }
         grouped_data = grouped_data.rename(columns=rename_columns)
+        numeric_columns = ['Velo', 'iVB', 'HB', 'Spin', 'RelH', 'RelS', 'Ext', 'VAA']
+        for col in numeric_columns:
+            grouped_data[col] = pd.to_numeric(grouped_data[col], errors='coerce')
+        grouped_data[numeric_columns] = grouped_data[numeric_columns].round(1)
 
         # Sort and add 'All' row
         grouped_data = grouped_data.sort_values(by='Count', ascending=False)
