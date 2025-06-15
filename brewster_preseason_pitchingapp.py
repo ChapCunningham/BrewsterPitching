@@ -333,7 +333,7 @@ def generate_pitch_traits_table(pitcher_name, batter_side, strikes, balls, date_
             'Extension': 'Ext',
             'VertApprAngle': 'VAA'
         }
-
+        grouped_data = grouped_data.rename(columns=rename_columns)
         # Merge with CLASS+ data (2025 only)
         filtered_class_plus = season_class_plus_df[season_class_plus_df["Pitcher"] == pitcher_name]
         grouped_data = pd.merge(
@@ -347,7 +347,7 @@ def generate_pitch_traits_table(pitcher_name, batter_side, strikes, balls, date_
         grouped_data["xRV+"] = pd.to_numeric(grouped_data["xRV+"], errors="coerce").fillna("N/A")
 
        
-        grouped_data = grouped_data.rename(columns=rename_columns)
+        
         numeric_columns = ['Velo', 'iVB', 'HB', 'Spin', 'RelH', 'RelS', 'Ext', 'VAA']
         for col in numeric_columns:
             grouped_data[col] = pd.to_numeric(grouped_data[col], errors='coerce')
