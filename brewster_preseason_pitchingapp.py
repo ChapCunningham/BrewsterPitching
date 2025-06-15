@@ -447,6 +447,7 @@ def generate_plate_discipline_table(pitcher_name, batter_side, strikes, balls, d
                 'Chase%': (total_chase / total_swings) * 100 if total_swings > 0 else 0,
                 'InZoneWhiff%': (in_zone_whiffs / total_in_zone) * 100 if total_in_zone > 0 else 0,
                 'Strike%': (total_strikes / len(df)) * 100 if len(df) > 0 else 0
+                'FP Strike%': fp_strike_pct  # ✅ Add this line
             }
             return metrics
 
