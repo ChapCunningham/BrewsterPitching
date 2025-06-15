@@ -322,10 +322,7 @@ def generate_pitch_traits_table(pitcher_name, batter_side, strikes, balls, date_
         
 
         # Clean and round numeric columns
-        numeric_columns = ['Velo', 'iVB', 'HB', 'Spin', 'RelH', 'RelS', 'Ext', 'VAA']
-        for col in numeric_columns:
-            grouped_data[col] = pd.to_numeric(grouped_data[col], errors='coerce')
-        grouped_data[numeric_columns] = grouped_data[numeric_columns].round(1)
+       
 
         # Merge with CLASS+ data (2025 only)
         filtered_class_plus = season_class_plus_df[season_class_plus_df["Pitcher"] == pitcher_name]
