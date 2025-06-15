@@ -337,7 +337,7 @@ def generate_pitch_traits_table(pitcher_name, batter_side, strikes, balls, date_
         grouped_data["xRV+"] = pd.to_numeric(grouped_data["xRV+"], errors="coerce").fillna("N/A")
 
         rename_columns = {
-            'TaggedPitchType': 'Pitch',
+            'TaggedPitchType': 'TaggedPitchType',
             'RelSpeed': 'Velo',
             'InducedVertBreak': 'iVB',
             'HorizontalBreak': 'HB',
