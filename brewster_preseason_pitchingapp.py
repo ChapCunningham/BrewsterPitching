@@ -472,7 +472,7 @@ def generate_plate_discipline_table(pitcher_name, batter_side, strikes, balls, d
             'Whiff%': 'Whiff%',
             'Chase%': 'Chase%',
             'InZoneWhiff%': 'InZoneWhiff%',
-            'FP Strike%': 'FP Strike%
+            'FP Strike%': 'FP Strike%'
         }
         plate_discipline_data = plate_discipline_data.rename(columns=rename_columns)
 
