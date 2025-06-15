@@ -19,7 +19,7 @@ def load_data(file_path):
     return df
 
 # File path for 2025 Season data
-season_file_path = "Brewster_2025_MASTER.csv"
+season_file_path = "Brewster_2025_MASTER.CSV"
 season_df = load_data(season_file_path)
 
 # Convert numeric columns
