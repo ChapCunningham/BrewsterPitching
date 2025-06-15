@@ -416,6 +416,14 @@ def generate_plate_discipline_table(pitcher_name, batter_side, strikes, balls, d
             total_in_zone = len(in_zone_pitches)
 
             # Define swing-related conditions
+            # First pitch logic
+            fp_df = df[(df['Balls'] == 0) & (df['Strikes'] == 0)]
+            fp_total = len(fp_df)
+            fp_strikes = fp_df[
+                ~fp_df['PitchCall'].isin(['HitByPitch', 'BallCalled', 'BallInDirt', 'BallinDirt'])
+            ].shape[0]
+
+            fp_strike_pct = (fp_strikes / fp_total) * 100 if fp_total > 0 else 0
             swing_conditions = ['StrikeSwinging', 'FoulBallFieldable', 'FoulBallNotFieldable', 'InPlay']
             total_swings = df[df['PitchCall'].isin(swing_conditions)].shape[0]
             total_whiffs = df[df['PitchCall'] == 'StrikeSwinging'].shape[0]
@@ -450,7 +458,8 @@ def generate_plate_discipline_table(pitcher_name, batter_side, strikes, balls, d
         plate_discipline_data['Pitch%'] = (plate_discipline_data['Count'] / total_pitches) * 100
 
         # Reorder columns for display
-        plate_discipline_data = plate_discipline_data[['AutoPitchType', 'Count', 'Pitch%', 'Strike%', 'InZone%', 'Swing%', 'Whiff%', 'Chase%', 'InZoneWhiff%']]
+        plate_discipline_data = plate_discipline_data[['AutoPitchType', 'Count', 'Pitch%', 'Strike%', 'InZone%', 'Swing%', 'Whiff%', 'Chase%', 'InZoneWhiff%', 'FP Strike%']]
+
 
         # Rename columns for readability
         rename_columns = {
@@ -462,7 +471,8 @@ def generate_plate_discipline_table(pitcher_name, batter_side, strikes, balls, d
             'Swing%': 'Swing%',
             'Whiff%': 'Whiff%',
             'Chase%': 'Chase%',
-            'InZoneWhiff%': 'InZoneWhiff%'
+            'InZoneWhiff%': 'InZoneWhiff%',
+            'FP Strike%': 'FP Strike%
         }
         plate_discipline_data = plate_discipline_data.rename(columns=rename_columns)
 
@@ -476,6 +486,12 @@ def generate_plate_discipline_table(pitcher_name, batter_side, strikes, balls, d
         ].shape[0]
         in_zone_whiffs = in_zone_pitches[in_zone_pitches['PitchCall'] == 'StrikeSwinging'].shape[0]
         total_strikes = pitcher_data[pitcher_data['PitchCall'].isin(['StrikeCalled', 'FoulBallFieldable', 'FoulBallNotFieldable', 'StrikeSwinging', 'InPlay'])].shape[0]
+        fp_df = pitcher_data[(pitcher_data['Balls'] == 0) & (pitcher_data['Strikes'] == 0)]
+        fp_total = len(fp_df)
+        fp_strikes = fp_df[
+            ~fp_df['PitchCall'].isin(['HitByPitch', 'BallCalled', 'BallInDirt', 'BallinDirt'])
+        ].shape[0]
+        fp_strike_pct = (fp_strikes / fp_total) * 100 if fp_total > 0 else 0
 
         all_row = {
             'Pitch': 'All',
@@ -486,7 +502,9 @@ def generate_plate_discipline_table(pitcher_name, batter_side, strikes, balls, d
             'Swing%': (total_swings / total_pitches) * 100,
             'Whiff%': (total_whiffs / total_swings) * 100 if total_swings > 0 else 0,
             'Chase%': (total_chase / total_swings) * 100 if total_swings > 0 else 0,
-            'InZoneWhiff%': (in_zone_whiffs / in_zone_pitches.shape[0]) * 100 if in_zone_pitches.shape[0] > 0 else 0
+            'InZoneWhiff%': (in_zone_whiffs / in_zone_pitches.shape[0]) * 100 if in_zone_pitches.shape[0] > 0 else 0,
+            'FP Strike%': fp_strike_pct
+
         }
 
         # Append "All" row to the DataFrame
