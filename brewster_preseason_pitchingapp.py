@@ -21,6 +21,8 @@ def load_data(file_path):
 # File path for 2025 Season data
 season_file_path = "Brewster_2025_MASTER.CSV"
 season_df = load_data(season_file_path)
+season_df = season_df[season_df['PitcherTeam'] == 'BRE_WHI']
+
 
 # Convert numeric columns
 numeric_columns = ['RelSpeed', 'SpinRate', 'Tilt', 'RelHeight', 'RelSide', 
